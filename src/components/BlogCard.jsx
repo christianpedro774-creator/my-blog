@@ -1,93 +1,96 @@
-import { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
 
-function BlogCard({
-  blog,
-  deleteBlog,
-  toggleFavourite
-}) {
-  const [showFullBlog, setShowFullBlog] = useState(false);
+import { useState } from "react";
+
+function BlogCard({ blog, deleteBlog }) {
+  const [showFullBlog, setShowFullBlog] =
+    useState(false);
 
   return (
     <article className="blog-card">
 
-      {/* TOP */}
-      <div className="blog-card-top">
+      {/* IMAGE */}
+      <img
+        className="blog-image"
+        src={blog.image}
+        alt={blog.title}
+        onError={(e) => {
+          e.currentTarget.src =
+            "https://placehold.co/800x450?text=No+Image";
+        }}
+      />
 
+      <div className="blog-card-content">
+
+        {/* DATE */}
         <span className="blog-date">
           {blog.createdAt}
         </span>
 
-        <button
-          className={
-            blog.favourite
-              ? "favourite-btn favourite-active"
-              : "favourite-btn"
-          }
-          onClick={() => toggleFavourite(blog.id)}
-        >
-          {blog.favourite ? "❤️" : "♡"}
-        </button>
+        {/* TITLE */}
+        <h3>
+          {blog.title}
+        </h3>
 
-      </div>
+        {/* DESCRIPTION */}
+        <p className="description">
+          {blog.description}
+        </p>
 
-      {/* TITLE */}
-      <h3>{blog.title}</h3>
+        {/* RATING */}
+        <div className="blog-rating">
 
-      {/* DESCRIPTION */}
-      <p className="description">
-        {blog.description}
-      </p>
+          <span className="stars">
+            {"★".repeat(blog.rating)}
+            {"☆".repeat(5 - blog.rating)}
+          </span>
 
-      {/* RATING */}
-      <div className="blog-rating">
+          <span>
+            {blog.rating}/5
+          </span>
 
-        <span className="stars">
-          {"★".repeat(blog.rating)}
-          {"☆".repeat(5 - blog.rating)}
-        </span>
-
-        <span>
-          {blog.rating}/5
-        </span>
-
-      </div>
-
-      {/* CONTENT */}
-      {showFullBlog && (
-        <div className="full-content">
-          <p>{blog.content}</p>
         </div>
-      )}
 
-      {/* BUTTONS */}
-      <div className="card-buttons">
+        {/* FULL CONTENT */}
+        {showFullBlog && (
+          <div className="full-content">
+            <p>
+              {blog.content}
+            </p>
+          </div>
+        )}
 
-        <button
-          className="read-btn"
-          onClick={() =>
-            setShowFullBlog(!showFullBlog)
-          }
-        >
-          {showFullBlog
-            ? "Hide Blog"
-            : "Read Blog"}
-        </button>
+        {/* BUTTONS */}
+        <div className="card-buttons">
 
-        <button
-          className="delete-btn"
-          onClick={() => {
-            if (
-              window.confirm(
-                "Are you sure you want to delete this blog?"
+          <button
+            className="read-btn"
+            onClick={() =>
+              setShowFullBlog(
+                !showFullBlog
               )
-            ) {
-              deleteBlog(blog.id);
             }
-          }}
-        >
-          Delete
-        </button>
+          >
+            {showFullBlog
+              ? "Hide Blog"
+              : "Read Blog"}
+          </button>
+
+          <button
+            className="delete-btn"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure you want to delete this blog?"
+                )
+              ) {
+                deleteBlog(blog.id);
+              }
+            }}
+          >
+            Delete
+          </button>
+
+        </div>
 
       </div>
 

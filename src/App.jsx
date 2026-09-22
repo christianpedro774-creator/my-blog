@@ -10,22 +10,21 @@ function App() {
   });
 
   const [search, setSearch] = useState("");
-  const [showFavourites, setShowFavourites] = useState(false);
 
-  // Save blogs to localStorage whenever blogs change
+  // Save blogs to localStorage
   useEffect(() => {
     localStorage.setItem("myBlogs", JSON.stringify(blogs));
   }, [blogs]);
 
-  // Add a new blog
-  function addBlog(title, description, content, rating) {
+  // Add blog
+  function addBlog(title, image, description, content, rating) {
     const newBlog = {
       id: Date.now(),
-      title: title,
-      description: description,
-      content: content,
+      title,
+      image,
+      description,
+      content,
       rating: Number(rating),
-      favourite: false,
       createdAt: new Date().toLocaleDateString(),
     };
 
@@ -34,20 +33,7 @@ function App() {
 
   // Delete blog
   function deleteBlog(id) {
-    setBlogs((prevBlogs) =>
-      prevBlogs.filter((blog) => blog.id !== id)
-    );
-  }
-
-  // Add/remove favourite
-  function toggleFavourite(id) {
-    setBlogs((prevBlogs) =>
-      prevBlogs.map((blog) =>
-        blog.id === id
-          ? { ...blog, favourite: !blog.favourite }
-          : blog
-      )
-    );
+    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
   }
 
   // Search blogs
@@ -61,35 +47,15 @@ function App() {
     );
   });
 
-  // Show only favourites
-  const displayedBlogs = showFavourites
-    ? filteredBlogs.filter((blog) => blog.favourite)
-    : filteredBlogs;
-
   return (
     <div className="app">
-
       {/* NAVBAR */}
       <header className="navbar">
         <div className="logo">
           My<span>Blog</span>
         </div>
 
-        <nav>
-          <button
-            className={!showFavourites ? "nav-btn active" : "nav-btn"}
-            onClick={() => setShowFavourites(false)}
-          >
-            Home
-          </button>
-
-          <button
-            className={showFavourites ? "nav-btn active" : "nav-btn"}
-            onClick={() => setShowFavourites(true)}
-          >
-            ❤️ Favourites
-          </button>
-        </nav>
+        <p className="nav-text">My Personal Blog</p>
       </header>
 
       {/* HERO */}
@@ -102,16 +68,13 @@ function App() {
             <span> thoughts.</span>
           </h1>
 
-          <p>
-            Write, save and organize your favourite stories,
-            ideas and tutorials.
-          </p>
+          <p>Write, save and organize your stories, ideas and tutorials.</p>
         </div>
       </section>
 
-      {/* ADD BLOG */}
+      {/* MAIN */}
       <main className="container">
-
+        {/* FORM */}
         <BlogForm addBlog={addBlog} />
 
         {/* SEARCH */}
@@ -124,30 +87,19 @@ function App() {
           />
 
           <div className="blog-count">
-            {showFavourites
-              ? `❤️ ${displayedBlogs.length} Favourite${
-                  displayedBlogs.length !== 1 ? "s" : ""
-                }`
-              : `${displayedBlogs.length} Blog${
-                  displayedBlogs.length !== 1 ? "s" : ""
-                }`}
+            {filteredBlogs.length} Blog
+            {filteredBlogs.length !== 1 ? "s" : ""}
           </div>
         </div>
 
-        {/* BLOG LIST */}
-        <BlogList
-          blogs={displayedBlogs}
-          deleteBlog={deleteBlog}
-          toggleFavourite={toggleFavourite}
-        />
-
+        {/* BLOGS */}
+        <BlogList blogs={filteredBlogs} deleteBlog={deleteBlog} />
       </main>
 
       {/* FOOTER */}
       <footer>
         <p>© 2026 MyBlog. All Rights Reserved.</p>
       </footer>
-
     </div>
   );
 }

@@ -1,20 +1,24 @@
+
 import BlogCard from "./BlogCard";
 
-function BlogList({
-  blogs,
-  deleteBlog,
-  toggleFavourite
-}) {
+function BlogList({ blogs, deleteBlog }) {
   if (blogs.length === 0) {
     return (
       <div className="empty-state">
-        <div className="empty-icon">📝</div>
 
-        <h3>No blogs found</h3>
+        <div className="empty-icon">
+          📝
+        </div>
+
+        <h3>
+          No blogs found
+        </h3>
 
         <p>
-          Create your first blog and it will appear here.
+          Create your first blog and it
+          will appear here.
         </p>
+
       </div>
     );
   }
@@ -23,10 +27,13 @@ function BlogList({
     <section className="blog-section">
 
       <div className="section-heading">
-        <div>
-          <p className="small-title">LATEST</p>
-          <h2>Blog Posts</h2>
-        </div>
+        <p className="small-title">
+          LATEST
+        </p>
+
+        <h2>
+          Blog Posts
+        </h2>
       </div>
 
       <div className="blog-grid">
@@ -36,7 +43,6 @@ function BlogList({
             key={blog.id}
             blog={blog}
             deleteBlog={deleteBlog}
-            toggleFavourite={toggleFavourite}
           />
         ))}
 
@@ -45,6 +51,6 @@ function BlogList({
     </section>
   );
 }
-//blog call back function why do we use it
-// prop drilling is bad due to it slowing down the program
+
 export default BlogList;
+
