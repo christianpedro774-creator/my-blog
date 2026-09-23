@@ -1,12 +1,28 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function BlogForm({ addBlog }) {
+function BlogForm({
+  addBlog,
+  updateBlog,
+  editingBlog,
+  cancelEdit,
+}) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(5);
+
+  // Fill form when editing a blog
+  useEffect(() => {
+    if (editingBlog) {
+      setTitle(editingBlog.title);
+      setImage(editingBlog.image);
+      setDescription(editingBlog.description);
+      setContent(editingBlog.content);
+      setRating(editingBlog.rating);
+    }
+  }, [editingBlog]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -21,15 +37,31 @@ function BlogForm({ addBlog }) {
       return;
     }
 
-    addBlog(
-      title,
-      image,
-      description,
-      content,
-      rating
-    );
+    if (editingBlog) {
+      // Update existing blog
+      updateBlog(
+        editingBlog.id,
+        title,
+        image,
+        description,
+        content,
+        rating
+      );
+    } else {
+      // Create new blog
+      addBlog(
+        title,
+        image,
+        description,
+        content,
+        rating
+      );
+    }
 
-    // Clear form
+    clearForm();
+  }
+
+  function clearForm() {
     setTitle("");
     setImage("");
     setDescription("");
@@ -37,23 +69,33 @@ function BlogForm({ addBlog }) {
     setRating(5);
   }
 
+  function handleCancel() {
+    clearForm();
+    cancelEdit();
+  }
+
   return (
     <section className="form-section">
 
       <div className="section-heading">
+
         <p className="small-title">
-          CREATE
+          {editingBlog ? "EDIT" : "CREATE"}
         </p>
 
         <h2>
-          Write a new blog
+          {editingBlog
+            ? "Edit your blog"
+            : "Write a new blog"}
         </h2>
+
       </div>
 
       <form onSubmit={handleSubmit}>
 
         {/* TITLE */}
         <div className="form-group">
+
           <label>
             Blog Title
           </label>
@@ -66,10 +108,12 @@ function BlogForm({ addBlog }) {
               setTitle(e.target.value)
             }
           />
+
         </div>
 
-        {/* IMAGE URL */}
+        {/* IMAGE */}
         <div className="form-group">
+
           <label>
             Image URL
           </label>
@@ -89,17 +133,21 @@ function BlogForm({ addBlog }) {
               src={image}
               alt="Blog preview"
               onError={(e) => {
-                e.currentTarget.style.display = "none";
+                e.currentTarget.style.display =
+                  "none";
               }}
               onLoad={(e) => {
-                e.currentTarget.style.display = "block";
+                e.currentTarget.style.display =
+                  "block";
               }}
             />
           )}
+
         </div>
 
         {/* DESCRIPTION */}
         <div className="form-group">
+
           <label>
             Description
           </label>
@@ -112,10 +160,12 @@ function BlogForm({ addBlog }) {
               setDescription(e.target.value)
             }
           />
+
         </div>
 
         {/* CONTENT */}
         <div className="form-group">
+
           <label>
             Blog Content
           </label>
@@ -127,10 +177,12 @@ function BlogForm({ addBlog }) {
               setContent(e.target.value)
             }
           />
+
         </div>
 
         {/* RATING */}
         <div className="form-group">
+
           <label>
             Rating
           </label>
@@ -157,14 +209,32 @@ function BlogForm({ addBlog }) {
             )}
 
           </div>
+
         </div>
 
-        <button
-          className="add-blog-btn"
-          type="submit"
-        >
-          + Publish Blog
-        </button>
+        {/* BUTTONS */}
+        <div className="form-actions">
+
+          <button
+            className="add-blog-btn"
+            type="submit"
+          >
+            {editingBlog
+              ? "✓ Update Blog"
+              : "+ Publish Blog"}
+          </button>
+
+          {editingBlog && (
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          )}
+
+        </div>
 
       </form>
 
@@ -173,4 +243,3 @@ function BlogForm({ addBlog }) {
 }
 
 export default BlogForm;
-

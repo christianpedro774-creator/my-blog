@@ -1,7 +1,11 @@
 
 import { useState } from "react";
 
-function BlogCard({ blog, deleteBlog }) {
+function BlogCard({
+  blog,
+  deleteBlog,
+  startEdit,
+}) {
   const [showFullBlog, setShowFullBlog] =
     useState(false);
 
@@ -53,9 +57,11 @@ function BlogCard({ blog, deleteBlog }) {
         {/* FULL CONTENT */}
         {showFullBlog && (
           <div className="full-content">
+
             <p>
               {blog.content}
             </p>
+
           </div>
         )}
 
@@ -73,6 +79,15 @@ function BlogCard({ blog, deleteBlog }) {
             {showFullBlog
               ? "Hide Blog"
               : "Read Blog"}
+          </button>
+
+          <button
+            className="edit-btn"
+            onClick={() =>
+              startEdit(blog)
+            }
+          >
+            Edit
           </button>
 
           <button
@@ -99,3 +114,4 @@ function BlogCard({ blog, deleteBlog }) {
 }
 
 export default BlogCard;
+

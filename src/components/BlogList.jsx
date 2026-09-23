@@ -1,7 +1,11 @@
 
 import BlogCard from "./BlogCard";
 
-function BlogList({ blogs, deleteBlog }) {
+function BlogList({
+  blogs,
+  deleteBlog,
+  startEdit,
+}) {
   if (blogs.length === 0) {
     return (
       <div className="empty-state">
@@ -27,6 +31,7 @@ function BlogList({ blogs, deleteBlog }) {
     <section className="blog-section">
 
       <div className="section-heading">
+
         <p className="small-title">
           LATEST
         </p>
@@ -34,6 +39,7 @@ function BlogList({ blogs, deleteBlog }) {
         <h2>
           Blog Posts
         </h2>
+
       </div>
 
       <div className="blog-grid">
@@ -43,6 +49,7 @@ function BlogList({ blogs, deleteBlog }) {
             key={blog.id}
             blog={blog}
             deleteBlog={deleteBlog}
+            startEdit={startEdit}
           />
         ))}
 
